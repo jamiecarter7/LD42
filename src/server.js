@@ -10,11 +10,18 @@ const port    =   process.env.PORT || 8080;
 const bodyParser = require('body-parser')
 var expressSanitizer = require('express-sanitizer');
 var mongoose = require('mongoose');
+const config = require('./config');
+
+var env = process.env.NODE_ENV || 'development';
+// console.log(env);
+const database = config[env].database
+// console.log(database);
+
 
 // DATABASE
 // ==============================================
 
-mongoose.connect('mongodb://localhost:27017/mininggame', { useNewUrlParser: true })
+mongoose.connect(database, { useNewUrlParser: true })
 var db = mongoose.connection;
 db.on('error', ()=> {console.log( '---FAILED to connect to mongoose')})
 db.once('open', () => {
