@@ -3,7 +3,7 @@ var router = express.Router();
 
 var Highscore = require('./mongoose/Highscore');
 
-const authorisation = '38gq9G3b83f9BF3&^@(@f9f2!933'
+const authorisation = '38gq9G3b83f9BF3&^@f9f2!933'
 
 router.use(function(req, res, next) {
 
@@ -32,6 +32,7 @@ router.post('/', async (req, res) => {
     const highscore1 = await Highscore.death.find({}, {'name': 1, 'minerals': 1, 'floor': 1, '_id': 0}, { limit:10, sort:{ minerals: -1, date: 1 }})
     console.log(highscore1);
     
+    const rank = 1;
     // const myscore = req.body.myscore;
     // const myname = req.body.myname;
     // console.log(myname, myscore);
@@ -58,7 +59,13 @@ router.post('/', async (req, res) => {
             
     //         console.log(result);
     //     })
-    res.send({success: true, data: highscore1})
+    res.send({
+        success: true, 
+        data: {
+            highscores: highscore1,
+            myrank: rank
+        }
+    })
 })
 
 
