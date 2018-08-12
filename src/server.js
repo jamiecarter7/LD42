@@ -13,7 +13,7 @@ var mongoose = require('mongoose');
 const config = require('./config');
 
 var env = process.env.NODE_ENV || 'development';
-// console.log(env);
+console.log(env);
 const database = config[env].database
 // console.log(database);
 
