@@ -1,4 +1,5 @@
 // server.js
+require("babel-polyfill");
 
 // BASE SETUP
 // ==============================================
