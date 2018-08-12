@@ -24,48 +24,41 @@ router.use(function(req, res, next) {
 
 router.post('/', async (req, res) => {
     // console.log('-- SAVED HIGHSCORE --');
-    Highscore.submit.find({}, {'name': 1, 'minerals': 1, 'floor': 1, '_id': 0}, { limit:10, sort:{ minerals: -1, date: 1 }}, function(err, highscores){
-        console.log('SUBMIT HIGHSCORES:');
+    // Highscore.submit.find({}, {'name': 1, 'minerals': 1, 'floor': 1, '_id': 0}, { limit:10, sort:{ minerals: -1, date: 1 }}, function(err, highscores){
+    //     console.log('SUBMIT HIGHSCORES:');
         
-        console.log(highscores);
-    })
-    Highscore.death.find({}, {'name': 1, 'minerals': 1, 'floor': 1, '_id': 0}, { limit:10, sort:{ minerals: -1, date: 1 }}, function(err, highscores){
-        console.log('DEATH HIGHSCORES:');
-
-        console.log(highscores);
-    })
-    const myscore = req.body.myscore;
-    const myname = req.body.myname;
-    console.log(myname, myscore);
-
-    const highscoredetails = await Highscore.submit.findOne({ name: myname, minerals: myscore }, function (err, result) {
-        if (err) {
-            console.log(err);
-        }
-        return result
-    });
-    console.log(highscoredetails);
+    //     console.log(highscores);
+    // })
+    const highscore1 = await Highscore.death.find({}, {'name': 1, 'minerals': 1, 'floor': 1, '_id': 0}, { limit:10, sort:{ minerals: -1, date: 1 }})
+    console.log(highscore1);
     
-    const time = highscoredetails.date;
-    console.log(time);
+    // const myscore = req.body.myscore;
+    // const myname = req.body.myname;
+    // console.log(myname, myscore);
 
-    Highscore.submit.countDocuments(
-        {
-        $or: [
-            { minerals: { $gt: myscore} }, // Greater than or equal to
-            { $and: [ { minerals: { $eq: myscore}} , { date: { $lt : time} } ] }	// Less than this time
-        ]
-    }
-    , function(err, result){
-            if(err) {
-                console.log(err);
-            } 
+    // const highscoredetails = await Highscore.submit.findOne({ name: myname, minerals: myscore });
+    // console.log(highscoredetails);
+    
+    // const time = highscoredetails.date;
+    // console.log(time);
+
+    // Highscore.submit.countDocuments(
+    //     {
+    //     $or: [
+    //         { minerals: { $gt: myscore} }, // Greater than or equal to
+    //         { $and: [ { minerals: { $eq: myscore}} , { date: { $lt : time} } ] }	// Less than this time
+    //     ]
+    // }
+    // , function(err, result){
+    //         if(err) {
+    //             console.log(err);
+    //         } 
             
-            console.log('MY POSITION:');
+    //         console.log('MY POSITION:');
             
-            console.log(result);
-        })
-    res.send({success: true, data: {}})
+    //         console.log(result);
+    //     })
+    res.send({success: true, data: highscore1})
 })
 
 

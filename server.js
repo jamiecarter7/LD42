@@ -53,6 +53,14 @@ router.use('/submithighscore', submitHighscore);
 const getHighscores = require('./getHighscores');
 router.use('/gethighscores', getHighscores);
 
+// const getHighscores = require('./getHighscores');
+router.use('/test', function(req, res) {
+    router.post('/', function(req, res) {
+        console.log('== TEST ==');
+        
+        res.send({success: true});
+    });
+});
 // // home page route (http://localhost:8080)
 // router.get('/', function(req, res) {
 //     res.send('im the home page!');  

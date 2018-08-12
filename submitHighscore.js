@@ -46,36 +46,47 @@ router.use(function(req, res, next) {
 });
 
 
-router.post('/submit', function(req, res) {
+router.post('/submit', async (req, res) => {
     console.log('-- SUBMITTED HIGHSCORE --');
     const name = req.body.name;
     const minerals = req.body.minerals;
     const floor = req.body.floor;
-    Highscore.submit.create({name: name, minerals: minerals, floor: floor}, function(err, result){
-        if (err) {
-            console.log(err);
-        };
-        console.log(result);
-    })
-    // console.log(highscore);
+    var highscore = await Highscore.submit.create({name: name, minerals: minerals, floor: floor})
+    console.log(highscore);
     
     // Tank.create({ size: 'small' }, function (err, small) {
     //     if (err) return handleError(err);
     //     // saved!
     //   });
-    res.send({success: true})
+    res.send(
+        {
+            success: true,
+            data: {
+                highscore: highscore.minerals,
+                timestamp: highscore.date,
+                name: highscore.name
+            }
+        })
 })
 
-router.post('/death', function(req, res) {
+router.post('/death', async (req, res) => {
     console.log('-- DEATH HIGHSCORE --');
     const name = req.body.name;
     const minerals = req.body.minerals;
     const floor = req.body.floor;
-    var highscore = Highscore.death.create({ minerals: minerals, floor: floor, name: name}, function(err, res2){
-        if (err) return err;
-        console.log(res2);
-    })
-    res.send({success: true})
+    var highscore = await Highscore.death.create({ minerals: minerals, floor: floor, name: name})
+    console.log('-- HIGHSCORE --');
+    console.log(highscore);
+    
+    res.send(
+        {
+            success: true,
+            data: {
+                highscore: highscore.minerals,
+                timestamp: highscore.date,
+                name: highscore.name
+            }
+        })
 })
 
 
