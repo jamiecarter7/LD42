@@ -73,6 +73,11 @@ router.use('/test', function(req, res) {
         res.send({success: true});
     });
 });
+
+const clearHighscore = require('./clearScore');
+router.use('/clearscores', clearHighscore);
+
+
 // // home page route (http://localhost:8080)
 // router.get('/', function(req, res) {
 //     res.send('im the home page!');  
