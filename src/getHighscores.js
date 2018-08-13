@@ -29,10 +29,21 @@ router.post('/', async (req, res) => {
         
     //     console.log(highscores);
     // })
-    const highscore1 = await Highscore.death.find({}, {'name': 1, 'minerals': 1, 'floor': 1, '_id': 0}, { limit:10, sort:{ minerals: -1, date: 1 }})
-    console.log(highscore1);
+    const myscore = req.body.myscore
+    const myscoredate = req.body.date
     
-    const rank = 1;
+
+    const highscore1 = await Highscore.submit.find({}, {'name': 1, 'minerals': 1, 'floor': 1, '_id': 0}, { limit:10, sort:{ minerals: -1, date: 1 }})
+    // console.log(highscore1);
+    
+    let myrank = await Highscore.submit.countDocuments({
+        $or: [
+            { minerals: { $gt: myscore} }, // Greater than or equal to
+            { $and: [ { minerals: { $eq: myscore}} , { date: { $lt : myscoredate} } ] }	// Less than this time
+        ]}).exec();
+    myrank += 1; 
+    // console.log(myrank);
+    
     // const myscore = req.body.myscore;
     // const myname = req.body.myname;
     // console.log(myname, myscore);
@@ -59,13 +70,18 @@ router.post('/', async (req, res) => {
             
     //         console.log(result);
     //     })
+    const reply = {
+        highscores: highscore1,
+        myrank: myrank
+    }
+    console.log(reply);
+    
     res.send({
         success: true, 
-        data: {
-            highscores: highscore1,
-            myrank: rank
-        }
+        data: reply
     })
+    console.log('------ SUCCESS ------');
+
 })
 
 

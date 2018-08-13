@@ -36,6 +36,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressSanitizer());
 
 // sample route with a route the way we're used to seeing it
+app.get('/', function(req, res) {
+    res.send('this is a sample!');
+});
+
 app.get('/sample', function(req, res) {
     res.send('this is a sample!');
 });
