@@ -59,6 +59,8 @@ router.post('/', async (req, res) => {
             myrank += 1;
             reply.myrank = myrank
         // }
+    } else {
+        reply.myrank = -1
     }
 
     
