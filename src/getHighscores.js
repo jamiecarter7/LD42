@@ -23,25 +23,45 @@ router.use(function(req, res, next) {
 });
 
 router.post('/', async (req, res) => {
-    // console.log('-- SAVED HIGHSCORE --');
+    console.log('-- GET HIGHSCORES --');
     // Highscore.submit.find({}, {'name': 1, 'minerals': 1, 'floor': 1, '_id': 0}, { limit:10, sort:{ minerals: -1, date: 1 }}, function(err, highscores){
     //     console.log('SUBMIT HIGHSCORES:');
         
     //     console.log(highscores);
     // })
-    const myscore = req.body.myscore
+    // console.log(req.body);
+    
+    let myscore = req.body.myscore
+    // console.log(myscore);
+
+    if (isNaN(myscore)) {
+        myscore = parseInt(myscore)
+    }
+    // console.log(myscore);
+    
     const myscoredate = req.body.date
     
 
     const highscore1 = await Highscore.submit.find({}, {'name': 1, 'minerals': 1, 'floor': 1, '_id': 0}, { limit:10, sort:{ minerals: -1, date: 1 }})
     // console.log(highscore1);
+    const reply = {
+        highscores: highscore1,
+        // myrank: myrank
+    }
+
+    if (myscore && myscoredate) {
+        let myrank = await Highscore.submit.countDocuments({
+            $or: [
+                { minerals: { $gt: myscore} }, // Greater than or equal to
+                { $and: [ { minerals: { $eq: myscore}} , { date: { $lt : myscoredate} } ] }	// Less than this time
+            ]}).exec();
+        // if (!isNaN(myrank)) {
+            myrank += 1;
+            reply.myrank = myrank
+        // }
+    }
+
     
-    let myrank = await Highscore.submit.countDocuments({
-        $or: [
-            { minerals: { $gt: myscore} }, // Greater than or equal to
-            { $and: [ { minerals: { $eq: myscore}} , { date: { $lt : myscoredate} } ] }	// Less than this time
-        ]}).exec();
-    myrank += 1; 
     // console.log(myrank);
     
     // const myscore = req.body.myscore;
@@ -70,10 +90,8 @@ router.post('/', async (req, res) => {
             
     //         console.log(result);
     //     })
-    const reply = {
-        highscores: highscore1,
-        myrank: myrank
-    }
+
+
     console.log(reply);
     
     res.send({

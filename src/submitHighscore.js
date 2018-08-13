@@ -49,15 +49,22 @@ router.use(function(req, res, next) {
 router.post('/', async (req, res) => {
     console.log('-- SUBMITTED HIGHSCORE --');
     const name = req.body.name;
+    
     let minerals = req.body.minerals;
-
+    console.log(minerals);
     if (isNaN(req.body.minerals)) {
         minerals = parseInt(minerals)
     }
+    console.log(minerals);
+    
     let floor = req.body.floor;
-    if (isNaN(req.body.minerals)) {
+    console.log(floor);
+    if (isNaN(req.body.floor)) {
         floor = parseInt(floor)
     }
+    console.log(floor);
+
+
     var myscore = await Highscore.submit.create({name: name, minerals: minerals, floor: floor})
     // console.log(myscore);
     const highscores = await Highscore.submit.find({}, {'name': 1, 'minerals': 1, 'floor': 1, '_id': 0}, { limit:10, sort:{ minerals: -1, date: 1 }})
@@ -80,7 +87,7 @@ router.post('/', async (req, res) => {
         highscores: highscores,
         myrank: myrank
     }
-    console.log(reply);
+    // console.log(reply);
     
     res.send(
         {
